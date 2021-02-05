@@ -12,22 +12,47 @@ var io = socket(server);
 // static files
 app.use(express.static('public'));
 
-// socket setup
-// this paratmeter takes hte server that we are working with
-
-// when particular client connect , it makes a socket connection
 io.on('connection', function(socket) {
-    // socket.on('chat message', (msg) => {
-    //     console.log(i, msg);
-    //     io.emit('chat message', msg);
-    //     ++i;
-
-    // });
     console.log("New user connected!");
-    // disconnnection means when tab is closed.
-    socket.on('disconnect', () => {
-        console.log("user was  disconnected!");
+
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: "Welcome to the Real-Time-Chat App",
+        createdAt: new Date().getTime(),
+    });
+
+
+    // this message to all the clients instead of me, when I connect to the server.
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: "New User Joined",
+        createdAt: new Date().getTime(),
+    });
+
+
+
+    socket.on('createMessage', (message) => {
+        console.log("Create-message", message);
+        // io.emit for everybody, and socket.emit for the singular body. and socket.broadcast.emit for everybody except for the person itself.
+        // io.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdat: new Date().getTime(),
+        // });
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdat: new Date().getTime(),
+        // });
 
     });
+
+
+    socket.on('disconnect', () => {
+        console.log("user was disconnected!");
+
+    });
+
+
 
 })
