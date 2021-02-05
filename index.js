@@ -10,7 +10,6 @@ var server = app.listen(4000, function() {
 // static files
 app.use(express.static('public'));
 
-
 // socket setup
 // this paratmeter takes hte server that we are working with
 var io = socket(server);
@@ -18,7 +17,7 @@ var io = socket(server);
 // when particular client connect , it makes a socket connection
 io.on('connection', function(socket) {
     socket.on('chat message', (msg) => {
-        console.log(i);
+        console.log(i, msg);
         io.emit('chat message', msg);
         ++i;
 
