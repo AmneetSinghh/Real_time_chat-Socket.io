@@ -6,16 +6,10 @@ var form = document.getElementById('form');
 var input = document.getElementById('input');
 
 
-
 socket.on('connect', function() {
-    console.log("New user is connected!");
-
-    socket.emit('createMessage', {
-        from: "Harry",
-        text: "See the data is sent to the backend!"
-    });
-
+    console.log("Connected to Server!");
 });
+
 socket.on('disconnect', function() {
     console.log("user  is disconnected!");
 
@@ -23,5 +17,17 @@ socket.on('disconnect', function() {
 
 socket.on('newMessage', function(message) {
     console.log("New message", message);
+    let li = document.createElement('li');
+    li.innerText = `${message.from}:${message.text}`;
+    document.querySelector('body').appendChild(li);
+});
 
+document.querySelector('#submit-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    socket.emit('createMessage', {
+        from: "User",
+        text: document.querySelector('input[name="message"]').value,
+    }, function() {
+
+    });
 });
