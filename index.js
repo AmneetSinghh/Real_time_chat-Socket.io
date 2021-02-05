@@ -6,20 +6,28 @@ var app = express();
 var server = app.listen(4000, function() {
     console.log("Listening to request oon port 4000");
 });
+var io = socket(server);
+
 
 // static files
 app.use(express.static('public'));
 
 // socket setup
 // this paratmeter takes hte server that we are working with
-var io = socket(server);
 
 // when particular client connect , it makes a socket connection
 io.on('connection', function(socket) {
-    socket.on('chat message', (msg) => {
-        console.log(i, msg);
-        io.emit('chat message', msg);
-        ++i;
+    // socket.on('chat message', (msg) => {
+    //     console.log(i, msg);
+    //     io.emit('chat message', msg);
+    //     ++i;
+
+    // });
+    console.log("New user connected!");
+    // disconnnection means when tab is closed.
+    socket.on('disconnect', () => {
+        console.log("user was  disconnected!");
 
     });
+
 })
